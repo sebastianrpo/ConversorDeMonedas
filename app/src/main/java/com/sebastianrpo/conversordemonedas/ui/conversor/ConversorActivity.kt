@@ -97,6 +97,7 @@ class ConversorActivity : AppCompatActivity() {
                             }
                             "Libras esterlinas" -> {
                                 cantidadConvertida.text = cantidadAConvertir.text
+                                //Fin versión 1
                             }
                         }
                     }
