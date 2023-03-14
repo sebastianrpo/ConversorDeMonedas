@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">ConversorDeMonedas</string>
+    <string name="conversor_monedas">Conversor de monedas</string>
+    <string name="elige_divisa">Elige una divisa</string>
+    <string name="cantidad_a_convertir">Ingrese la cantidad a convertir</string>
+    <string name="ejemplo_cantidad_convertir">Ejemplo: 1000</string>
+    <string name="valor_inicial">0</string>
+    <string name="divisa_a_convertir">Elija la divisa a convertir</string>
+    <string name="convertir">Convertir</string>
+    <string name="cantidad_convertida">Cantidad convertida</string>
+    <string-array name="Divisas">
+        <item>Pesos colombianos</item>
+        <item>Dólares</item>
+        <item>Libras esterlinas</item>
+    </string-array>
+</resources>
