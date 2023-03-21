@@ -8,6 +8,7 @@
     <string name="divisa_a_convertir">Elija la divisa a convertir</string>
     <string name="convertir">Convertir</string>
     <string name="cantidad_convertida">Cantidad convertida</string>
+    <string name="error_divisas">Error al traer las divisas</string>
     <string-array name="Divisas">
         <item>Pesos colombianos</item>
         <item>Dólares</item>

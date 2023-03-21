@@ -6,103 +6,69 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.sebastianrpo.conversordemonedas.R
 import com.sebastianrpo.conversordemonedas.databinding.ActivityConversorBinding
 
 class ConversorActivity : AppCompatActivity() {
     private lateinit var conversorBinding: ActivityConversorBinding
+    private lateinit var conversorViewModel: ConversorViewModel
+    private var posicionElegirSpinner = ""
+    private var posicionConvertirSpinner = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         conversorBinding = ActivityConversorBinding.inflate(layoutInflater)
+        conversorViewModel = ViewModelProvider(this)[ConversorViewModel::class.java]
         val view = conversorBinding.root
         setContentView(view)
 
-        val elegirSpinner = conversorBinding.eligeDivisaSpinner
-        val convertirSpinner = conversorBinding.divisaConvertirSpinner
-        val lista = resources.getStringArray(R.array.Divisas)
-        val adapter = ArrayAdapter(this,android.R.layout.simple_spinner_item,lista)
-        var posicionElegirSpinner = ""
-        var posicionConvertirSpinner = ""
-        val cantidadAConvertir = conversorBinding.cantidadConvertirEditText
-        val cantidadConvertida = conversorBinding.cantidadConvertidaTextView
-        var total = 0.0
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, resources.getStringArray(R.array.Divisas))
+        conversorBinding.eligeDivisaSpinner.adapter = adapter
+        conversorBinding.divisaConvertirSpinner.adapter = adapter
 
-        elegirSpinner.adapter = adapter
-        convertirSpinner.adapter = adapter
-
-        elegirSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                posicionElegirSpinner = lista[position]
+        conversorBinding.eligeDivisaSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                posicionElegirSpinner = resources.getStringArray(R.array.Divisas)[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Toast.makeText(this@ConversorActivity,"Error al traer las divisas", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    this@ConversorActivity,
+                    getString(R.string.error_divisas),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
-        convertirSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                posicionConvertirSpinner = lista[position]
+        conversorBinding.divisaConvertirSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                posicionConvertirSpinner = resources.getStringArray(R.array.Divisas)[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Toast.makeText(this@ConversorActivity,"Error al traer las divisas", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    this@ConversorActivity,
+                    getString(R.string.error_divisas),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
-        conversorBinding.convertirButton.setOnClickListener{
-            if (cantidadAConvertir.text!!.isNotEmpty()) {
-                when (posicionElegirSpinner) {
-                    "Pesos colombianos" -> {
-                        when (posicionConvertirSpinner) {
-                            "Pesos colombianos" -> {
-                                cantidadConvertida.text = cantidadAConvertir.text
-                            }
-                            "Dólares" -> {
-                                total = cantidadAConvertir.text.toString().toDouble() * 0.00021
-                                cantidadConvertida.text = total.toString()
-                            }
-                            "Libras esterlinas" -> {
-                                total = cantidadAConvertir.text.toString().toDouble() * 0.00018
-                                cantidadConvertida.text = total.toString()
-                            }
-                        }
-                    }
-
-                    "Dólares" -> {
-                        when (posicionConvertirSpinner) {
-                            "Pesos colombianos" -> {
-                                total = cantidadAConvertir.text.toString().toDouble() * 4765.50
-                                cantidadConvertida.text = total.toString()
-                            }
-                            "Dólares" -> {
-                                cantidadConvertida.text = cantidadAConvertir.text
-                            }
-                            "Libras esterlinas" -> {
-                                total = cantidadAConvertir.text.toString().toDouble() * 0.82
-                                cantidadConvertida.text = total.toString()
-                            }
-                        }
-                    }
-
-                    "Libras esterlinas" -> {
-                        when (posicionConvertirSpinner) {
-                            "Pesos colombianos" -> {
-                                total = cantidadAConvertir.text.toString().toDouble() * 5791.85
-                                cantidadConvertida.text = total.toString()
-                            }
-                            "Dólares" -> {
-                                total = cantidadAConvertir.text.toString().toDouble() * 1.22
-                                cantidadConvertida.text = total.toString()
-                            }
-                            "Libras esterlinas" -> {
-                                cantidadConvertida.text = cantidadAConvertir.text
-                                //Fin versión 1
-                            }
-                        }
-                    }
-                }
+        conversorBinding.convertirButton.setOnClickListener {
+            if (conversorBinding.cantidadConvertirEditText.text!!.isNotEmpty()) {
+                conversorBinding.cantidadConvertidaTextView.text = conversorViewModel.convertCurrency(posicionElegirSpinner,posicionConvertirSpinner,conversorBinding.cantidadConvertirEditText.text.toString().toDouble())
+                    .toString()
             }
+        }
     }
-}
 }
